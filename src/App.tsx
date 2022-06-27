@@ -1,18 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import "./App.css";
 import List from "./components/list";
 import Form from "./components/form";
-
-interface Sub {
-  nick: string;
-  avatar: string;
-  subMonths: number;
-  description?: string;
-}
-//setting types in array
+import { Sub } from "./types";
 
 interface AppState {
   subs: Array<Sub>;
+  newSubsNumber: number;
 }
 
 const INITIAL_STATE = [
@@ -32,7 +26,10 @@ const INITIAL_STATE = [
 
 function App() {
   const [subs, setSubs] = useState<AppState["subs"]>([]);
-  //the type is a array of sub, another form is puting "Sub[]"
+  //this functions calls hooks. the type is an "array of sub", another form is puting "Sub[]"
+
+  const divRef = useRef<HTMLDivElement>(null);
+  //hook donde puedes guardar un valor que se queda guardado entre renderizados pero no cauza un renderizado
 
   useEffect(() => {
     setSubs(INITIAL_STATE);
@@ -55,11 +52,14 @@ function App() {
  // This was another form to do  previous coding, this form is not used!!
     */
 
+  const handleNewSub = (newSub: Sub): void =>
+    setSubs((subs) => [...subs, newSub]);
+
   return (
-    <div className="App">
+    <div className="App" ref={divRef}>
       <h1>midu subs</h1>
       <List subs={subs} />
-      <Form />
+      <Form onNewSub={handleNewSub} />
     </div>
   );
 }

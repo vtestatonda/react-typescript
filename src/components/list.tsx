@@ -1,11 +1,8 @@
+import { Sub } from "../types";
+
 interface Props {
   //  children: React.ReactNode
-  subs: Array<{
-    nick: string;
-    avatar: string;
-    subMonths: number;
-    description?: string;
-  }>;
+  subs: Array<Sub>;
 }
 //the propriety children only is representative that we can use a children if we need
 
@@ -18,7 +15,7 @@ export default function List({ subs }: Props) {
             <img src={sub.avatar} alt={`Avatar for ${sub.nick}`} />
             <h4>
               {" "}
-              {sub.nick} (<small>{sub.subMonths}</small>
+              {sub.nick} (<small>{sub.subMonths})</small>
             </h4>
             <p>{sub.description?.substring(0, 100)}</p>
           </li>
