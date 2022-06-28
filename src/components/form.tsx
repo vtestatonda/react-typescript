@@ -1,41 +1,43 @@
-import React, { SetStateAction, useState } from "react";
+import useNewSubForm from "../hook/useNewSubForm";
 import { Sub } from "../types";
-
-interface FormState {
-  inputValues: Sub;
-}
 
 interface FormProps {
   onNewSub: (newSub: Sub) => void;
 }
 
-const INITIAL_STATE = {
-  nick: "",
-  subMonths: 0,
-  avatar: "",
-  description: "",
-};
-
 const Form = ({ onNewSub }: FormProps) => {
-  const [inputValues, setInputValues] =
-    useState<FormState["inputValues"]>(INITIAL_STATE);
+  // const [inputValues, setInputValues] = useState<FormState["inputValues"]>(INITIAL_STATE);
+  const [inputValues, dispatch] = useNewSubForm();
 
   const handleSubmit = (evt: React.FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
     onNewSub(inputValues);
-    handleClear();
+    dispatch({ type: "clear" });
   };
+  //when clic
 
   const handleChange = (
     evt: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    setInputValues({
-      ...inputValues,
-      [evt.target.name]: evt.target.value,
+    const { name, value } = evt.target;
+    dispatch({
+      type: "change_value",
+      payload: {
+        inputName: name,
+        inputValue: value,
+      },
     });
   };
 
-  const handleClear = () => setInputValues(INITIAL_STATE);
+  const handleClear = () => {
+    dispatch({ type: "clear" });
+  };
+
+  //   setInputValues({
+  //     ...inputValues,
+  //     [evt.target.name]: evt.target.value,
+  //   });
+  // };
 
   return (
     <div>
